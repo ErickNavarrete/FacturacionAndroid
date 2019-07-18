@@ -23,11 +23,11 @@ public class scrFactura extends AppCompatActivity {
 
     ArticuloClass articuloClass;
     FacturaResponse facturaResponse;
-    EditText tbTicket;
-    EditText tbClave;
-    EditText tbFecha;
-    EditText tbVolumen;
-    EditText tbPrecio;
+    com.google.android.material.textfield.TextInputEditText tbTicket;
+    com.google.android.material.textfield.TextInputEditText tbClave;
+    com.google.android.material.textfield.TextInputEditText tbFecha;
+    com.google.android.material.textfield.TextInputEditText tbVolumen;
+    com.google.android.material.textfield.TextInputEditText tbPrecio;
     Button btnFactura;
 
     @Override

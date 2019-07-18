@@ -21,8 +21,8 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity{
 
     Button btnBuscar;
-    EditText tbTicket;
-    EditText tbMonto;
+    com.google.android.material.textfield.TextInputEditText tbTicket;
+    com.google.android.material.textfield.TextInputEditText tbMonto;
 
     String ticket;
     double monto;
@@ -38,46 +38,43 @@ public class MainActivity extends AppCompatActivity{
         tbTicket = findViewById(R.id.tbTicket);
         tbMonto =  findViewById(R.id.tbMonto);
 
-        btnBuscar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ticket = tbTicket.getText().toString();
-                monto = Double.valueOf(tbMonto.getText().toString());
+        btnBuscar.setOnClickListener(view -> {
+            ticket = tbTicket.getText().toString();
+            monto = Double.valueOf(tbMonto.getText().toString());
 
-                Call<TicketResponse> call =  MyApiAdapter.getApiService().getTicket(ticket,monto);
-                call.enqueue(new Callback<TicketResponse>() {
-                    @Override
-                    public void onResponse(Call<TicketResponse> call, Response<TicketResponse> response) {
-                        if(response.isSuccessful()){
-                            ticketResponse = response.body();
+            Call<TicketResponse> call =  MyApiAdapter.getApiService().getTicket(ticket,monto);
+            call.enqueue(new Callback<TicketResponse>() {
+                @Override
+                public void onResponse(Call<TicketResponse> call, Response<TicketResponse> response) {
+                    if(response.isSuccessful()){
+                        ticketResponse = response.body();
 
-                            Intent intent = new Intent(MainActivity.this,scrFactura.class);
-                            intent.putExtra("MyClass",ticketResponse);
-                            startActivity(intent);
+                        Intent intent = new Intent(MainActivity.this,scrFactura.class);
+                        intent.putExtra("MyClass",ticketResponse);
+                        startActivity(intent);
 
-                        }else{
-                            AlertDialog.Builder alerta = new AlertDialog.Builder(MainActivity.this);
-                            alerta.setMessage("Ticket no encontrado, verifique sus datos")
-                            .setCancelable(true)
-                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    dialogInterface.cancel();
-                                }
-                            });
+                    }else{
+                        AlertDialog.Builder alerta = new AlertDialog.Builder(MainActivity.this);
+                        alerta.setMessage("Ticket no encontrado, verifique sus datos")
+                        .setCancelable(true)
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                            }
+                        });
 
-                            AlertDialog titulo = alerta.create();
-                            titulo.setTitle("Error");
-                            titulo.show();
-                        }
+                        AlertDialog titulo = alerta.create();
+                        titulo.setTitle("Error");
+                        titulo.show();
                     }
+                }
 
-                    @Override
-                    public void onFailure(Call<TicketResponse> call, Throwable t) {
-                        Log.i("Error",t.getMessage());
-                    }
-                });
-            }
+                @Override
+                public void onFailure(Call<TicketResponse> call, Throwable t) {
+                    Log.i("Error",t.getMessage());
+                }
+            });
         });
     }
 }

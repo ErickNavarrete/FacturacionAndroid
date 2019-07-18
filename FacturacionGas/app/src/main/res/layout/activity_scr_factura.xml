@@ -8,89 +8,109 @@
     tools:context=".scrFactura">
 
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
         android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
-        android:text="Ticket:" />
+        android:layout_marginRight="10dp"
 
-    <EditText
-        android:id="@+id/tbTicket"
+        app:startIconDrawable="@drawable/ticket_black_24dp"
+        android:hint="Número de Ticket">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tbTicket"
+            android:background="@null"
+            android:inputType="none"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
+        android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:inputType="none"/>
 
-    <TextView
-        android:id="@+id/textView2"
+        app:startIconDrawable="@drawable/ic_shopping_cart_black_24dp"
+        android:hint="Nombre del Producto">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tbClave"
+            android:background="@null"
+            android:inputType="none"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:text="Nombre del Producto" />
 
-    <EditText
-        android:id="@+id/tbClave"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="none"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:text="Fecha" />
-
-    <EditText
-        android:id="@+id/tbFecha"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
+        android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        />
 
-    <TextView
-        android:id="@+id/textView4"
+        app:startIconDrawable="@drawable/ic_event_black_24dp"
+        android:hint="Fecha">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tbFecha"
+            android:background="@null"
+            android:inputType="none"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:text="Volumen" />
 
-    <EditText
-        android:id="@+id/tbVolumen"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="none"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        />
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:text="Precio" />
-
-    <EditText
-        android:id="@+id/tbPrecio"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="none"
+        android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        />
+
+        app:startIconDrawable="@drawable/ic_opacity_black_24dp"
+        android:hint="Volumen">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tbVolumen"
+            android:background="@null"
+            android:inputType="none"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+
+        app:startIconDrawable="@drawable/money_black_24dp"
+        android:hint="Precio">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tbPrecio"
+            android:background="@null"
+            android:inputType="none"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/btnFactura"
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"

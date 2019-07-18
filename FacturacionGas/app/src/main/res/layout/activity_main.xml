@@ -7,29 +7,59 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <ImageView
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:src="@drawable/ic_receipt"/>
 
-    <EditText
-        android:id="@+id/tbTicket"
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
+
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="50dp"
-        android:text="Número de Ticket" />
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
 
-    <EditText
-        android:id="@+id/tbMonto"
+        app:startIconDrawable="@drawable/ticket_black_24dp"
+        android:hint=" Número de Ticket">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tbTicket"
+            android:background="@null"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
-        android:layout_marginBottom="2dp"
-        android:text="Monto" />
+
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+
+        app:startIconDrawable="@drawable/money_black_24dp"
+        android:hint="Monto">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tbMonto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:inputType="numberDecimal"
+            android:drawableLeft="@color/cardview_dark_background"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/btnBuscar"
+        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="Buscar" />
+
 
 </LinearLayout>
