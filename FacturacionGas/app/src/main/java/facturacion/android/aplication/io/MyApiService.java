@@ -1,7 +1,9 @@
 package facturacion.android.aplication.io;
 
+import facturacion.android.aplication.io.body.ClienteBody;
 import facturacion.android.aplication.io.body.FacturaBody;
 import facturacion.android.aplication.io.response.ArticuloClass;
+import facturacion.android.aplication.io.response.ClienteResponse;
 import facturacion.android.aplication.io.response.FacturaResponse;
 import facturacion.android.aplication.io.response.TicketResponse;
 import retrofit2.Call;
@@ -25,5 +27,16 @@ public interface MyApiService {
     @POST("Facturacion/Facturas")
     Call<FacturaResponse> createFactura(
             @Body FacturaBody facturaBody
+    );
+
+    @GET("Cliente")
+    Call<ClienteResponse> getCliente(
+            @Query("usuario") String usuario,
+            @Query("password") String password
+    );
+
+    @POST("Cliente")
+    Call<ClienteResponse> createCliente(
+            @Body ClienteBody clienteBody
     );
 }

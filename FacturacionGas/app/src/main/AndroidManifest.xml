@@ -12,18 +12,27 @@
         android:supportsRtl="true"
         android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/Theme.MyApp">
-        <activity android:name=".Registro"></activity>
-        <activity android:name=".scrLogin" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".Registro"
+            android:label="Nuevo Usuario"
+            >
+        </activity>
+        <activity android:name=".scrLogin"
+            android:label="Inicio Sesión"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".scrFactura"
-            android:parentActivityName=".MainActivity" />
+        <activity android:name=".MainActivity"
+            android:label="Búsqueda Ticket"
+            >
+        </activity>
+        <activity android:name=".scrFactura"
+            android:parentActivityName=".MainActivity"
+            android:label="Datos Ticket"
+            />
     </application>
 
 </manifest>

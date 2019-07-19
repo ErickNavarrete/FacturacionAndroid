@@ -20,7 +20,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-
+        app:boxBackgroundColor="#eeeeee"
         app:startIconDrawable="@drawable/ticket_black_24dp"
         android:hint=" Número de Ticket">
 
@@ -39,7 +39,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-
+        app:boxBackgroundColor="#eeeeee"
         app:startIconDrawable="@drawable/money_black_24dp"
         android:hint="Monto">
 
@@ -56,9 +56,10 @@
     <Button
         android:id="@+id/btnBuscar"
         android:layout_marginTop="20dp"
-        android:layout_width="wrap_content"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:text="Buscar" />
 
 

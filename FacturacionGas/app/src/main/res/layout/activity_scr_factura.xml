@@ -15,7 +15,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-
+        app:boxBackgroundColor="#eeeeee"
         app:startIconDrawable="@drawable/ticket_black_24dp"
         android:hint="Número de Ticket">
 
@@ -35,7 +35,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-
+        app:boxBackgroundColor="#eeeeee"
         app:startIconDrawable="@drawable/ic_shopping_cart_black_24dp"
         android:hint="Nombre del Producto">
 
@@ -55,7 +55,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-
+        app:boxBackgroundColor="#eeeeee"
         app:startIconDrawable="@drawable/ic_event_black_24dp"
         android:hint="Fecha">
 
@@ -75,7 +75,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-
+        app:boxBackgroundColor="#eeeeee"
         app:startIconDrawable="@drawable/ic_opacity_black_24dp"
         android:hint="Volumen">
 
@@ -95,7 +95,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-
+        app:boxBackgroundColor="#eeeeee"
         app:startIconDrawable="@drawable/money_black_24dp"
         android:hint="Precio">
 
@@ -111,6 +111,8 @@
     <Button
         android:id="@+id/btnFactura"
         android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
