@@ -2,6 +2,7 @@ package facturacion.android.aplication;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -45,6 +46,7 @@ public class Registro extends AppCompatActivity {
         tbRFC = findViewById(R.id.tbRFC);
         tbRazon = findViewById(R.id.tbRazon);
 
+        setToolbar();
         btnRegistro.setOnClickListener(view -> {
             ClienteBody clienteBody = new ClienteBody(
                     tbNombre.getText().toString(),
@@ -88,5 +90,10 @@ public class Registro extends AppCompatActivity {
                 }
             });
         });
+    }
+
+    private void setToolbar(){
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
     }
 }

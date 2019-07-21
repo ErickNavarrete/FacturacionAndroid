@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/btnDatos"
+            android:icon="@drawable/ic_person_black_24dp"
+            android:title="Mis Datos">
+        </item>
+        <item
+            android:id="@+id/btnFacturas"
+            android:icon="@drawable/money_black_24dp"
+            android:title="Mis Facturas">
+        </item>
+    </group>
+
+    <item android:title="Otras Opciones">
+        <menu>
+            <item
+                android:id="@+id/btnSesion"
+                android:icon="@drawable/ic_sesion"
+                android:title="Cerrar Sesión">
+            </item>
+        </menu>
+    </item>
+</menu>
