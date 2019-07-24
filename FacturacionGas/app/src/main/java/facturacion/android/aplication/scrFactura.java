@@ -130,6 +130,7 @@ public class scrFactura extends AppCompatActivity {
         btnFactura.setOnClickListener(view -> {
             progressDialog = new ProgressDialog(scrFactura.this);
             progressDialog.setMessage("Cargando...");
+            progressDialog.setCancelable(false);
             progressDialog.show();
 
             FacturaBody facturaBody = new FacturaBody(
@@ -143,9 +144,9 @@ public class scrFactura extends AppCompatActivity {
                     articuloClass.getU_med_sat(),
                     articuloClass.getU_med_v(),
                     articuloClass.getId_art(),
-                    "CONTADO",
-                    "01",
-                    "PUE",
+                    "PUE | Pago en una sola exhibición",
+                    "01 | Efectivo",
+                    "PUE | Pago en una sola exhibición",
                     empresaResponse.getCp(),
                     empresaResponse.getRfc(),
                     empresaResponse.getEmpresa1(),
@@ -161,7 +162,19 @@ public class scrFactura extends AppCompatActivity {
                 public void onResponse(Call<FacturaResponse> call1, Response<FacturaResponse> response) {
                     if(response.isSuccessful()){
                         facturaResponse = response.body();
-                        progressDialog.hide();
+                        progressDialog.cancel();
+
+                        AlertDialog.Builder alerta = new AlertDialog.Builder(scrFactura.this);
+                        alerta.setMessage("Factura realizada con éxito")
+                                .setCancelable(false)
+                                .setPositiveButton("Ok", (dialogInterface, i) -> {
+                                    Intent intent = new Intent(scrFactura.this,scrDatosFactura.class);
+                                    intent.putExtra("Factura",facturaResponse);
+                                    startActivity(intent);
+                                });
+
+                        AlertDialog titulo = alerta.create();
+                        titulo.show();
                     }else{
                         progressDialog.cancel();
 
@@ -176,7 +189,7 @@ public class scrFactura extends AppCompatActivity {
 
                         AlertDialog.Builder alerta = new AlertDialog.Builder(scrFactura.this);
                         alerta.setMessage(errorResponse)
-                                .setCancelable(true)
+                                .setCancelable(false)
                                 .setPositiveButton("Ok", (dialogInterface, i) -> dialogInterface.cancel());
 
                         AlertDialog titulo = alerta.create();

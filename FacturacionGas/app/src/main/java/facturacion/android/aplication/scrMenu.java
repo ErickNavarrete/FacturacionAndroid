@@ -70,6 +70,7 @@ public class scrMenu extends AppCompatActivity {
             checkInputs();
             progressDialog = new ProgressDialog(scrMenu.this);
             progressDialog.setMessage("Cargando...");
+            progressDialog.setCancelable(false);
             progressDialog.show();
 
             ticket = tbTicket.getText().toString();
@@ -81,13 +82,13 @@ public class scrMenu extends AppCompatActivity {
                 public void onResponse(Call<TicketResponse> call, Response<TicketResponse> response) {
                     if(response.isSuccessful()){
                         ticketResponse = response.body();
-                        progressDialog.hide();
+                        progressDialog.cancel();
                         Intent intent = new Intent(scrMenu.this,scrFactura.class);
                         intent.putExtra("MyClass",ticketResponse);
                         startActivity(intent);
 
                     }else{
-                        progressDialog.hide();
+                        progressDialog.cancel();
                         AlertDialog.Builder alerta = new AlertDialog.Builder(scrMenu.this);
                         alerta.setMessage("Ticket no encontrado, verifique sus datos")
                                 .setCancelable(true)
@@ -101,7 +102,7 @@ public class scrMenu extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<TicketResponse> call, Throwable t) {
-                    progressDialog.hide();
+                    progressDialog.cancel();
                     AlertDialog.Builder alert = new AlertDialog.Builder(scrMenu.this);
                     alert.setMessage("No fue posible conectarse con el servidor, intente de nuevo")
                             .setCancelable(false)

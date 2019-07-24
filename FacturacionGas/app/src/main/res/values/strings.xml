@@ -1,6 +1,32 @@
 <resources>
-    <string name="app_name">FacturacionGas</string>
+    <string name="app_name">Facturacion</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="CFDI">
+        <item>G01-Adquisición de mercancias</item>
+        <item>G02-Devoluciones, descuentos o bonificaciones</item>
+        <item>G03-Gastos en general</item>
+        <item>I01-Construcciones</item>
+        <item>I02-Mobilario y equipo de oficina por inversiones</item>
+        <item>I03-Equipo de transporte</item>
+        <item>I04-Equipo de computo y accesorios</item>
+        <item>I05-Dados, troqueles, moldes, matrices y herramental</item>
+        <item>I06-Comunicaciones telefónicas</item>
+        <item>I07-Comunicaciones satelitales</item>
+        <item>I08-Otra maquinaria y equipo</item>
+        <item>D01-Honorarios médicos, dentales y gastos hospitalarios</item>
+        <item>D02-Gastos médicos por incapacidad o discapacidad</item>
+        <item>D03-Gastos funerales</item>
+        <item>D04-Donativos</item>
+        <item>D05-Intereses reales efectivamente pagados por créditos hipotecarios (casa habitación)</item>
+        <item>D06-Aportaciones voluntarias al SAR</item>
+        <item>D07-Primas por seguros de gastos médicos</item>
+        <item>D08-Gastos de transportación escolar obligatoria</item>
+        <item>D09-Depósitos en cuentas para el ahorro, primas que tengan como base planes de pensiones</item>
+        <item>D10-Pagos por servicios educativos (colegiaturas)</item>
+        <item>P01-Por definir</item>
+    </string-array>
+    <string name="title_activity_scr_datos_factura">scrDatosFactura</string>
 </resources>

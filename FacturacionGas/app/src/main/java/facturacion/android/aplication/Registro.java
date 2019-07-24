@@ -7,16 +7,21 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 
@@ -27,7 +32,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Registro extends AppCompatActivity {
+public class Registro extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private Button btnRegistro;
     private TextInputEditText tbNombre;
@@ -38,10 +43,11 @@ public class Registro extends AppCompatActivity {
     private TextInputEditText tbPass2;
     private TextInputEditText tbMail;
     private TextInputEditText tbRFC;
-    private TextInputEditText tbRazon;
 
     private String errorResponse;
     private ProgressDialog progressDialog;
+    private Spinner spinner;
+    private String cfdi_option;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,22 +63,32 @@ public class Registro extends AppCompatActivity {
         tbPass2 = findViewById(R.id.tbPass2);
         tbMail = findViewById(R.id.tbMail);
         tbRFC = findViewById(R.id.tbRFC);
-        tbRazon = findViewById(R.id.tbRazon);
+        spinner = findViewById(R.id.sCFDI);
 
         setToolbar();
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.CFDI,android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
+
         btnRegistro.setOnClickListener(view -> {
             closeKeyboard();
             progressDialog = new ProgressDialog(Registro.this);
             progressDialog.setMessage("Cargando...");
+            progressDialog.setCancelable(false);
             progressDialog.show();
-            checkFields();
+            if (!checkFields()){
+                progressDialog.cancel();
+                return;
+            }
             ClienteBody clienteBody = new ClienteBody(
                     tbNombre.getText().toString(),
                     tbAM.getText().toString(),
                     tbAP.getText().toString(),
                     tbUser.getText().toString(),
                     tbPass.getText().toString(),
-                    tbRazon.getText().toString(),
+                    cfdi_option,
                     tbRFC.getText().toString(),
                     tbMail.getText().toString()
             );
@@ -82,19 +98,18 @@ public class Registro extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                     if(response.code() == 201){
-                        progressDialog.hide();
+                        progressDialog.cancel();
                         AlertDialog.Builder alerta = new AlertDialog.Builder(Registro.this);
                         alerta.setMessage("Usuario creado con éxito")
                                 .setCancelable(false)
-                                .setPositiveButton("Ok", (dialogInterface, i) -> dialogInterface.cancel());
+                                .setPositiveButton("Ok", (dialogInterface, i) -> {
+                                    Intent intent = new Intent(Registro.this,scrLogin.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intent);
+                                });
 
                         AlertDialog titulo = alerta.create();
-                        titulo.setTitle("Éxito");
                         titulo.show();
-
-                        Intent intent = new Intent(Registro.this,scrLogin.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
                     }
                     if(response.code() == 409){
                         progressDialog.hide();
@@ -125,7 +140,6 @@ public class Registro extends AppCompatActivity {
                         title.show();
                     }
                 }
-
                 @Override
                 public void onFailure(Call<UserResponse> call, Throwable t) {
 
@@ -138,60 +152,56 @@ public class Registro extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
-    private void checkFields(){
+    private boolean checkFields(){
         if(TextUtils.isEmpty(tbNombre.getText().toString())){
             tbNombre.setError("Campo obligatorio");
             tbNombre.requestFocus();
-            return;
+            return false;
         }
         if(TextUtils.isEmpty(tbAM.getText().toString())){
             tbAM.setError("Campo obligatorio");
             tbAM.requestFocus();
-            return;
+            return false;
         }
         if(TextUtils.isEmpty(tbAP.getText().toString())){
             tbAP.setError("Campo obligatorio");
             tbAP.requestFocus();
-            return;
+            return false;
         }
         if(TextUtils.isEmpty(tbUser.getText().toString())){
             tbUser.setError("Campo obligatorio");
             tbUser.requestFocus();
-            return;
+            return false;
         }
         if(TextUtils.isEmpty(tbPass.getText().toString())){
             tbPass.setError("Campo obligatorio");
             tbPass.requestFocus();
-            return;
+            return false;
         }
         if(TextUtils.isEmpty(tbPass2.getText().toString())){
             tbPass2.setError("Campo obligatorio");
             tbPass2.requestFocus();
-            return;
+            return false;
         }
         if(TextUtils.isEmpty(tbMail.getText().toString())){
             tbMail.setError("Campo obligatorio");
             tbMail.requestFocus();
-            return;
+            return false;
         }
         if(TextUtils.isEmpty(tbRFC.getText().toString())){
             tbRFC.setError("Campo obligatorio");
             tbRFC.requestFocus();
-            return;
+            return false;
         }
-        if(TextUtils.isEmpty(tbRazon.getText().toString())){
-            tbRazon.setError("Campo obligatorio");
-            tbRazon.requestFocus();
-            return;
-        }
-
         if (!TextUtils.isEmpty(tbPass.getText().toString()) && !TextUtils.isEmpty(tbPass2.getText().toString())){
             if(!tbPass.getText().toString().equals(tbPass2.getText().toString())){
                 tbPass.setError("Las contraseñas no coinciden");
                 tbPass.requestFocus();
-                return;
+                return false;
             }
         }
+
+        return true;
     }
     private void closeKeyboard() {
         View view = this.getCurrentFocus();
@@ -199,5 +209,16 @@ public class Registro extends AppCompatActivity {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        cfdi_option = adapterView.getItemAtPosition(i).toString();
+        closeKeyboard();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
     }
 }

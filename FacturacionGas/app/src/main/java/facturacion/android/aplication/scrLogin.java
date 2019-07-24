@@ -55,6 +55,7 @@ public class scrLogin extends AppCompatActivity {
             closeKeyboard();
             progressDialog = new ProgressDialog(scrLogin.this);
             progressDialog.setMessage("Cargando...");
+            progressDialog.setCancelable(false);
             progressDialog.show();
             Call<ClienteResponse> call = MyApiAdapter.getApiService().getCliente(tbUsuario.getText().toString(), tbPass.getText().toString());
             call.enqueue(new Callback<ClienteResponse>() {
@@ -64,7 +65,7 @@ public class scrLogin extends AppCompatActivity {
                         cliente = response.body();
                         saveOnPreferences();
 
-                        progressDialog.hide();
+                        progressDialog.cancel();
 
                         Intent intent = new Intent(scrLogin.this,scrMenu.class);
                         saveUser(cliente.getNombre(),cliente.getRfc(),cliente.getEmail());
@@ -72,12 +73,12 @@ public class scrLogin extends AppCompatActivity {
                         startActivity(intent);
                     }
                     if(response.code() == 404){
-                        progressDialog.hide();
+                        progressDialog.cancel();
                         tbUsuario.setError("Usuario y/o contraseña incorrectos");
                         tbUsuario.requestFocus();
                     }
                     if(response.code() >= 500){
-                        progressDialog.hide();
+                        progressDialog.cancel();
                         AlertDialog.Builder alert = new AlertDialog.Builder(scrLogin.this);
                         alert.setMessage("No fue posible conectarse con el servidor, intente de nuevo")
                                 .setCancelable(false)

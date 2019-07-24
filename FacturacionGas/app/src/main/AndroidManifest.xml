@@ -12,23 +12,30 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp">
-        <activity android:name=".scrLogin"
-            android:label="Inicio Sesión">
+        <activity android:name=".scrDatosFactura"
+            android:label="Datos Factura" >
+        </activity>
+        <activity
+            android:name=".scrLogin"
+            android:label="Facturación">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".scrMenu"
-            android:label="Búsqueda Ticket">
-        </activity>
-        <activity android:name=".Registro"
-            android:label="Nuevo Usuario"></activity>
-        <activity android:name=".scrFactura"
-            android:label="Datos Ticket"/>
-        <activity android:name=".MainActivity"
-            android:label="Búsqueda Ticket"></activity>
+        <activity
+            android:name=".scrMenu"
+            android:label="Búsqueda Ticket" />
+        <activity
+            android:name=".Registro"
+            android:label="Nuevo Usuario" />
+        <activity
+            android:name=".scrFactura"
+            android:label="Datos Ticket" />
+        <activity
+            android:name=".MainActivity"
+            android:label="Búsqueda Ticket" />
     </application>
 
 </manifest>
