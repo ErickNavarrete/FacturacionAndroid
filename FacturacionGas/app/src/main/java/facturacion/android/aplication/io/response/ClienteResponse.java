@@ -10,6 +10,15 @@ public class ClienteResponse {
     private String nombre_razonsocial;
     private String rfc;
     private String email;
+    private String CFDI;
+
+    public String getCFDI() {
+        return CFDI;
+    }
+
+    public void setCFDI(String CFDI) {
+        this.CFDI = CFDI;
+    }
 
     public int getId_usuario() {
         return id_usuario;

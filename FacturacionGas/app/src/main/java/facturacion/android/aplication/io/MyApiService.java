@@ -4,8 +4,10 @@ import facturacion.android.aplication.io.body.ClienteBody;
 import facturacion.android.aplication.io.body.FacturaBody;
 import facturacion.android.aplication.io.response.ArticuloClass;
 import facturacion.android.aplication.io.response.ClienteResponse;
+import facturacion.android.aplication.io.response.EmpresaResponse;
 import facturacion.android.aplication.io.response.FacturaResponse;
 import facturacion.android.aplication.io.response.TicketResponse;
+import facturacion.android.aplication.io.response.UserResponse;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -35,8 +37,16 @@ public interface MyApiService {
             @Query("password") String password
     );
 
+    @GET("Cliente")
+    Call<ClienteResponse> getClienteCFDI(
+            @Query("RFC") String RFC
+    );
+
     @POST("Cliente")
-    Call<ClienteResponse> createCliente(
+    Call<UserResponse> createCliente(
             @Body ClienteBody clienteBody
     );
+
+    @GET("Empresa")
+    Call<EmpresaResponse> getEmpresa();
 }

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,12 +14,14 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputEditText;
@@ -42,10 +45,10 @@ public class scrMenu extends AppCompatActivity {
 
     private String ticket;
     private double monto;
-    private String Nombre;
 
     private TicketResponse ticketResponse;
     private SharedPreferences prefs;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +66,12 @@ public class scrMenu extends AppCompatActivity {
         getNombre();
 
         btnBuscar.setOnClickListener(view -> {
+            closeKeyboard();
+            checkInputs();
+            progressDialog = new ProgressDialog(scrMenu.this);
+            progressDialog.setMessage("Cargando...");
+            progressDialog.show();
+
             ticket = tbTicket.getText().toString();
             monto = Double.valueOf(tbMonto.getText().toString());
 
@@ -72,12 +81,13 @@ public class scrMenu extends AppCompatActivity {
                 public void onResponse(Call<TicketResponse> call, Response<TicketResponse> response) {
                     if(response.isSuccessful()){
                         ticketResponse = response.body();
-
+                        progressDialog.hide();
                         Intent intent = new Intent(scrMenu.this,scrFactura.class);
                         intent.putExtra("MyClass",ticketResponse);
                         startActivity(intent);
 
                     }else{
+                        progressDialog.hide();
                         AlertDialog.Builder alerta = new AlertDialog.Builder(scrMenu.this);
                         alerta.setMessage("Ticket no encontrado, verifique sus datos")
                                 .setCancelable(true)
@@ -91,11 +101,17 @@ public class scrMenu extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<TicketResponse> call, Throwable t) {
-                    Log.i("Error",t.getMessage());
+                    progressDialog.hide();
+                    AlertDialog.Builder alert = new AlertDialog.Builder(scrMenu.this);
+                    alert.setMessage("No fue posible conectarse con el servidor, intente de nuevo")
+                            .setCancelable(false)
+                            .setPositiveButton("Ok", (dialogInterface, i) -> dialogInterface.cancel());
+
+                    AlertDialog title = alert.create();
+                    title.show();
                 }
             });
         });
-
         navigationView.setNavigationItemSelectedListener(item -> {
 
             switch (item.getItemId()){
@@ -109,6 +125,27 @@ public class scrMenu extends AppCompatActivity {
             }
 
             return false;
+        });
+        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+                closeKeyboard();
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+                closeKeyboard();
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
         });
     }
 
@@ -144,5 +181,27 @@ public class scrMenu extends AppCompatActivity {
         View headerView = navigationView.getHeaderView(0);
         lbNombre = headerView.findViewById(R.id.lbNombre);
         lbNombre.setText(nombre_p);
+    }
+
+    private void closeKeyboard() {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    private boolean checkInputs(){
+        if(TextUtils.isEmpty(tbTicket.getText().toString())){
+            tbTicket.setError("Campo obligatorio");
+            tbTicket.requestFocus();
+            return false;
+        }
+        if(TextUtils.isEmpty(tbMonto.getText().toString())){
+            tbMonto.setError("Campo obligatorio");
+            tbMonto.requestFocus();
+            return false;
+        }
+        return true;
     }
 }

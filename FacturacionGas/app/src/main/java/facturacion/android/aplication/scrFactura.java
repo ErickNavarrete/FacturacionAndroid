@@ -1,22 +1,30 @@
 package facturacion.android.aplication;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import com.google.android.material.textfield.TextInputEditText;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 import facturacion.android.aplication.io.MyApiAdapter;
 import facturacion.android.aplication.io.body.FacturaBody;
 import facturacion.android.aplication.io.response.ArticuloClass;
+import facturacion.android.aplication.io.response.ClienteResponse;
+import facturacion.android.aplication.io.response.EmpresaResponse;
 import facturacion.android.aplication.io.response.FacturaResponse;
 import facturacion.android.aplication.io.response.TicketResponse;
 import retrofit2.Call;
@@ -25,20 +33,29 @@ import retrofit2.Response;
 
 public class scrFactura extends AppCompatActivity {
 
-    ArticuloClass articuloClass;
-    FacturaResponse facturaResponse;
-    com.google.android.material.textfield.TextInputEditText tbTicket;
-    com.google.android.material.textfield.TextInputEditText tbClave;
-    com.google.android.material.textfield.TextInputEditText tbFecha;
-    com.google.android.material.textfield.TextInputEditText tbVolumen;
-    com.google.android.material.textfield.TextInputEditText tbPrecio;
-    Button btnFactura;
+    private ArticuloClass articuloClass;
+    private FacturaResponse facturaResponse;
+    private ClienteResponse clienteResponse;
+    private EmpresaResponse empresaResponse;
+    private String CFDI;
+    private String errorResponse;
+
+    private TextInputEditText tbTicket;
+    private TextInputEditText tbClave;
+    private TextInputEditText tbFecha;
+    private TextInputEditText tbVolumen;
+    private TextInputEditText tbPrecio;
+    private Button btnFactura;
+    private SharedPreferences preferences;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scr_factura);
         setToolbar();
+
+        preferences = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
 
         tbTicket = findViewById(R.id.tbTicket);
         tbClave = findViewById(R.id.tbClave);
@@ -73,54 +90,105 @@ public class scrFactura extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ArticuloClass> call, Throwable t) {
-                Log.i("Error",t.getMessage());
             }
         });
 
-        btnFactura.setOnClickListener(new View.OnClickListener() {
+        Call<ClienteResponse> cliente_call = MyApiAdapter.getApiService().getClienteCFDI(getRFC());
+        cliente_call.enqueue(new Callback<ClienteResponse>() {
             @Override
-            public void onClick(View view) {
-                FacturaBody facturaBody = new FacturaBody(
-                        ticketResponse.getId_venta(),
-                        articuloClass.getClave(),
-                        ticketResponse.getVolumen(),
-                        ticketResponse.getMonto(),
-                        ticketResponse.getPrecio(),
-                        articuloClass.getIeps_gasolinas(),
-                        articuloClass.getClave_sat(),
-                        articuloClass.getU_med_sat(),
-                        articuloClass.getU_med_v(),
-                        articuloClass.getId_art(),
-                        "CONTADO",
-                        "01",
-                        "PUE",
-                        "72760",
-                        "AAA010101AAA",
-                        "D.M.M. DISPOSITIVOS Y MAQUINADOS MEXICANOS, S.A. DE C.V.",
-                        "601",
-                        "AAA010101AAA",
-                        "Cliente de prueba SA de CV",
-                        "G01"
-                );
-
-
-                Call<FacturaResponse> call = MyApiAdapter.getApiService().createFactura(facturaBody);
-                call.enqueue(new Callback<FacturaResponse>() {
-                    @Override
-                    public void onResponse(Call<FacturaResponse> call, Response<FacturaResponse> response) {
-                        if(response.isSuccessful()){
-                            facturaResponse = response.body();
-
-                            Log.i("EXITO", "onResponse: 'EXITO UUID:" + facturaResponse.getUuid());
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<FacturaResponse> call, Throwable t) {
-                        Log.i("ERROR", "Algo salió mal" + t.toString());
-                    }
-                });
+            public void onResponse(Call<ClienteResponse> call, Response<ClienteResponse> response) {
+                if(response.isSuccessful()){
+                    clienteResponse = response.body();
+                    CFDI = clienteResponse.getCFDI();
+                }else{
+                    CFDI = "";
+                }
+                Log.i("Prueba", CFDI);
             }
+
+            @Override
+            public void onFailure(Call<ClienteResponse> call, Throwable t) {
+                Log.i("Error", t.getMessage());
+            }
+        });
+
+        Call<EmpresaResponse> empresa_call = MyApiAdapter.getApiService().getEmpresa();
+        empresa_call.enqueue(new Callback<EmpresaResponse>() {
+            @Override
+            public void onResponse(Call<EmpresaResponse> call, Response<EmpresaResponse> response) {
+                if (response.isSuccessful()){
+                    empresaResponse = response.body();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<EmpresaResponse> call, Throwable t) {
+                Log.i("Error", t.getMessage());
+            }
+        });
+
+        btnFactura.setOnClickListener(view -> {
+            progressDialog = new ProgressDialog(scrFactura.this);
+            progressDialog.setMessage("Cargando...");
+            progressDialog.show();
+
+            FacturaBody facturaBody = new FacturaBody(
+                    ticketResponse.getId_venta(),
+                    articuloClass.getClave(),
+                    ticketResponse.getVolumen(),
+                    ticketResponse.getMonto(),
+                    ticketResponse.getPrecio(),
+                    articuloClass.getIeps_gasolinas(),
+                    articuloClass.getClave_sat(),
+                    articuloClass.getU_med_sat(),
+                    articuloClass.getU_med_v(),
+                    articuloClass.getId_art(),
+                    "CONTADO",
+                    "01",
+                    "PUE",
+                    empresaResponse.getCp(),
+                    empresaResponse.getRfc(),
+                    empresaResponse.getEmpresa1(),
+                    empresaResponse.getClave(),
+                    getRFC(),
+                    getNombre(),
+                    CFDI
+            );
+
+            Call<FacturaResponse> call1 = MyApiAdapter.getApiService().createFactura(facturaBody);
+            call1.enqueue(new Callback<FacturaResponse>() {
+                @Override
+                public void onResponse(Call<FacturaResponse> call1, Response<FacturaResponse> response) {
+                    if(response.isSuccessful()){
+                        facturaResponse = response.body();
+                        progressDialog.hide();
+                    }else{
+                        progressDialog.cancel();
+
+                        try {
+                            JSONObject jObjError = new JSONObject(response.errorBody().string());
+                            errorResponse = jObjError.getString("Message");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        AlertDialog.Builder alerta = new AlertDialog.Builder(scrFactura.this);
+                        alerta.setMessage(errorResponse)
+                                .setCancelable(true)
+                                .setPositiveButton("Ok", (dialogInterface, i) -> dialogInterface.cancel());
+
+                        AlertDialog titulo = alerta.create();
+                        titulo.setTitle("Error");
+                        titulo.show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<FacturaResponse> call1, Throwable t) {
+                }
+            });
         });
     }
 
@@ -145,5 +213,13 @@ public class scrFactura extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private String getRFC(){
+        String RFC = preferences.getString("RFC","");
+        return RFC;
+    }
+    private String getNombre(){
+        String Nombre = preferences.getString("Nombre","");
+        return Nombre;
+    }
 
 }

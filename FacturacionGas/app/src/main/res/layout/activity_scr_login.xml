@@ -41,7 +41,9 @@
                 android:id="@+id/tbUsuario"
                 android:background="@null"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:minLines="1"
+                android:maxLines="1"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
