@@ -42,6 +42,7 @@
                 android:background="@null"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="textPersonName"
                 android:minLines="1"
                 android:maxLines="1"/>
 
@@ -85,7 +86,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnRegistro"
-                    style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Registro"/>
@@ -101,7 +102,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnIniciar"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -117,7 +118,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_gravity="right"
-            android:checked="false"
+            android:checked="true"
             android:layout_marginRight="10dp"
             android:text="Recordar"/>
     </LinearLayout>

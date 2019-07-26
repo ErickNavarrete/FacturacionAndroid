@@ -21,8 +21,9 @@ public class FacturaBody {
     private String rfc_cliente;
     private String nombre_cliente;
     private String uso_cfdi;
+    private String correo;
 
-    public FacturaBody(String folio_venta, String clave, double volumen, double monto, double precio_unitario, double ieps_gasolinas, String clave_sat, String u_med_sat, String u_med_v, int id_art, String condiciones_pago, String forma_pago, String metodo_pago, String cp_emisor, String rfc_emisor, String nombre_emisor, String regimen_fiscal, String rfc_cliente, String nombre_cliente, String uso_cfdi) {
+    public FacturaBody(String folio_venta, String clave, double volumen, double monto, double precio_unitario, double ieps_gasolinas, String clave_sat, String u_med_sat, String u_med_v, int id_art, String condiciones_pago, String forma_pago, String metodo_pago, String cp_emisor, String rfc_emisor, String nombre_emisor, String regimen_fiscal, String rfc_cliente, String nombre_cliente, String uso_cfdi, String correo) {
         this.folio_venta = folio_venta;
         this.clave = clave;
         this.volumen = volumen;
@@ -43,5 +44,6 @@ public class FacturaBody {
         this.rfc_cliente = rfc_cliente;
         this.nombre_cliente = nombre_cliente;
         this.uso_cfdi = uso_cfdi;
+        this.correo = correo;
     }
 }

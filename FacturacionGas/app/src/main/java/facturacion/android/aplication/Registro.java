@@ -6,9 +6,12 @@ import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -18,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -142,7 +146,9 @@ public class Registro extends AppCompatActivity implements AdapterView.OnItemSel
                 }
                 @Override
                 public void onFailure(Call<UserResponse> call, Throwable t) {
-
+                    progressDialog.cancel();
+                    Toast toast = Toast.makeText(getApplicationContext(),t.getMessage(),Toast.LENGTH_LONG);
+                    toast.show();
                 }
             });
         });
@@ -221,4 +227,34 @@ public class Registro extends AppCompatActivity implements AdapterView.OnItemSel
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        IntentFilter intentFilter = new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION);
+        registerReceiver(wifiStateReceiver,intentFilter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(wifiStateReceiver);
+    }
+
+    private BroadcastReceiver wifiStateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int wifiStateExtra = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_UNKNOWN);
+            switch (wifiStateExtra){
+                case WifiManager.WIFI_STATE_DISABLED:
+                    Toast toast2 = Toast.makeText(getApplicationContext(),"Conexión perdida",Toast.LENGTH_LONG);
+                    toast2.show();
+                    break;
+                case WifiManager.WIFI_STATE_ENABLING:
+                    Toast toast = Toast.makeText(getApplicationContext(),"Conexión establecida",Toast.LENGTH_LONG);
+                    toast.show();
+                    break;
+            }
+        }
+    };
 }

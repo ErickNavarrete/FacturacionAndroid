@@ -6,13 +6,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.Toast;
+
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONException;
@@ -153,7 +158,8 @@ public class scrFactura extends AppCompatActivity {
                     empresaResponse.getClave(),
                     getRFC(),
                     getNombre(),
-                    CFDI
+                    CFDI,
+                    getCorreo()
             );
 
             Call<FacturaResponse> call1 = MyApiAdapter.getApiService().createFactura(facturaBody);
@@ -200,6 +206,9 @@ public class scrFactura extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<FacturaResponse> call1, Throwable t) {
+                    progressDialog.cancel();
+                    Toast toast = Toast.makeText(getApplicationContext(),t.getMessage(),Toast.LENGTH_LONG);
+                    toast.show();
                 }
             });
         });
@@ -234,5 +243,39 @@ public class scrFactura extends AppCompatActivity {
         String Nombre = preferences.getString("Nombre","");
         return Nombre;
     }
+    private String getCorreo(){
+        String Correo = preferences.getString("Mail","");
+        return Correo;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        IntentFilter intentFilter = new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION);
+        registerReceiver(wifiStateReceiver,intentFilter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(wifiStateReceiver);
+    }
+
+    private BroadcastReceiver wifiStateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int wifiStateExtra = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_UNKNOWN);
+            switch (wifiStateExtra){
+                case WifiManager.WIFI_STATE_DISABLED:
+                    Toast toast2 = Toast.makeText(getApplicationContext(),"Conexión perdida",Toast.LENGTH_LONG);
+                    toast2.show();
+                    break;
+                case WifiManager.WIFI_STATE_ENABLING:
+                    Toast toast = Toast.makeText(getApplicationContext(),"Conexión establecida",Toast.LENGTH_LONG);
+                    toast.show();
+                    break;
+            }
+        }
+    };
 
 }

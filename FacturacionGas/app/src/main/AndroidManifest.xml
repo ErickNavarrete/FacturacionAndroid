@@ -3,6 +3,8 @@
     package="facturacion.android.aplication">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
     <application
         android:allowBackup="true"
@@ -12,9 +14,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp">
-        <activity android:name=".scrDatosFactura"
-            android:label="Datos Factura" >
-        </activity>
+        <activity android:name=".scrDatosCliente"></activity>
+        <activity
+            android:name=".scrDatosFactura"
+            android:label="Datos Factura"></activity>
         <activity
             android:name=".scrLogin"
             android:label="Facturación">

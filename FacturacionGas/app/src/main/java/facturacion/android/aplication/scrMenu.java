@@ -5,10 +5,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -17,6 +20,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -67,11 +71,15 @@ public class scrMenu extends AppCompatActivity {
 
         btnBuscar.setOnClickListener(view -> {
             closeKeyboard();
-            checkInputs();
             progressDialog = new ProgressDialog(scrMenu.this);
             progressDialog.setMessage("Cargando...");
             progressDialog.setCancelable(false);
             progressDialog.show();
+
+            if(!checkInputs()){
+                progressDialog.cancel();
+                return;
+            }
 
             ticket = tbTicket.getText().toString();
             monto = Double.valueOf(tbMonto.getText().toString());
@@ -89,14 +97,26 @@ public class scrMenu extends AppCompatActivity {
 
                     }else{
                         progressDialog.cancel();
-                        AlertDialog.Builder alerta = new AlertDialog.Builder(scrMenu.this);
-                        alerta.setMessage("Ticket no encontrado, verifique sus datos")
-                                .setCancelable(true)
-                                .setPositiveButton("Ok", (dialogInterface, i) -> dialogInterface.cancel());
+                        if(response.code() == 409){
+                            AlertDialog.Builder alerta = new AlertDialog.Builder(scrMenu.this);
+                            alerta.setMessage("Ticket ya facturado")
+                                    .setCancelable(true)
+                                    .setPositiveButton("Ok", (dialogInterface, i) -> dialogInterface.cancel());
 
-                        AlertDialog titulo = alerta.create();
-                        titulo.setTitle("Error");
-                        titulo.show();
+                            AlertDialog titulo = alerta.create();
+                            titulo.setTitle("Error");
+                            titulo.show();
+                        }
+                        if(response.code() == 404){
+                            AlertDialog.Builder alerta = new AlertDialog.Builder(scrMenu.this);
+                            alerta.setMessage("Ticket no encontrado, verifique sus datos")
+                                    .setCancelable(true)
+                                    .setPositiveButton("Ok", (dialogInterface, i) -> dialogInterface.cancel());
+
+                            AlertDialog titulo = alerta.create();
+                            titulo.setTitle("Error");
+                            titulo.show();
+                        }
                     }
                 }
 
@@ -117,6 +137,8 @@ public class scrMenu extends AppCompatActivity {
 
             switch (item.getItemId()){
                 case R.id.btnDatos:
+                    Intent intent = new Intent(scrMenu.this,scrDatosCliente.class);
+                    startActivity(intent);
                     break;
                 case R.id.btnFacturas:
                     break;
@@ -205,4 +227,34 @@ public class scrMenu extends AppCompatActivity {
         }
         return true;
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        IntentFilter intentFilter = new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION);
+        registerReceiver(wifiStateReceiver,intentFilter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(wifiStateReceiver);
+    }
+
+    private BroadcastReceiver wifiStateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int wifiStateExtra = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_UNKNOWN);
+            switch (wifiStateExtra){
+                case WifiManager.WIFI_STATE_DISABLED:
+                    Toast toast2 = Toast.makeText(getApplicationContext(),"Conexión perdida",Toast.LENGTH_LONG);
+                    toast2.show();
+                    break;
+                case WifiManager.WIFI_STATE_ENABLING:
+                    Toast toast = Toast.makeText(getApplicationContext(),"Conexión establecida",Toast.LENGTH_LONG);
+                    toast.show();
+                    break;
+            }
+        }
+    };
 }

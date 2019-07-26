@@ -5,14 +5,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.button.MaterialButton;
@@ -57,6 +61,10 @@ public class scrLogin extends AppCompatActivity {
             progressDialog.setMessage("Cargando...");
             progressDialog.setCancelable(false);
             progressDialog.show();
+            if(!checkInputs()){
+                progressDialog.cancel();
+                return;
+            }
             Call<ClienteResponse> call = MyApiAdapter.getApiService().getCliente(tbUsuario.getText().toString(), tbPass.getText().toString());
             call.enqueue(new Callback<ClienteResponse>() {
                 @Override
@@ -91,7 +99,9 @@ public class scrLogin extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<ClienteResponse> call, Throwable t) {
-
+                    progressDialog.cancel();
+                    Toast toast = Toast.makeText(getApplicationContext(),t.getMessage(),Toast.LENGTH_LONG);
+                    toast.show();
                 }
             });
         });
@@ -101,6 +111,36 @@ public class scrLogin extends AppCompatActivity {
             startActivity(intent);
         });
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        IntentFilter intentFilter = new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION);
+        registerReceiver(wifiStateReceiver,intentFilter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(wifiStateReceiver);
+    }
+
+    private BroadcastReceiver wifiStateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int wifiStateExtra = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_UNKNOWN);
+            switch (wifiStateExtra){
+                case WifiManager.WIFI_STATE_DISABLED:
+                    Toast toast2 = Toast.makeText(getApplicationContext(),"Conexión perdida",Toast.LENGTH_LONG);
+                    toast2.show();
+                    break;
+                case WifiManager.WIFI_STATE_ENABLING:
+                    Toast toast = Toast.makeText(getApplicationContext(),"Conexión establecida",Toast.LENGTH_LONG);
+                    toast.show();
+                    break;
+            }
+        }
+    };
 
     private void setToolbar(){
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -138,5 +178,19 @@ public class scrLogin extends AppCompatActivity {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    private boolean checkInputs(){
+        if(TextUtils.isEmpty(tbUsuario.getText().toString())){
+            tbUsuario.setError("Campo obligatorio");
+            tbUsuario.requestFocus();
+            return false;
+        }
+        if(TextUtils.isEmpty(tbPass.getText().toString())){
+            tbPass.setError("Campo obligatorio");
+            tbPass.requestFocus();
+            return false;
+        }
+        return true;
     }
 }
