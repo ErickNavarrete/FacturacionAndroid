@@ -12,83 +12,56 @@ public class ClienteResponse {
     private String email;
     private String CFDI;
 
-    public String getCFDI() {
-        return CFDI;
+    public ClienteResponse(int id_usuario, String nombre, String apellido_paterno, String apellido_materno, String usuario, String pass, String nombre_razonsocial, String rfc, String email, String CFDI) {
+        this.id_usuario = id_usuario;
+        this.nombre = nombre;
+        this.apellido_paterno = apellido_paterno;
+        this.apellido_materno = apellido_materno;
+        this.usuario = usuario;
+        this.pass = pass;
+        this.nombre_razonsocial = nombre_razonsocial;
+        this.rfc = rfc;
+        this.email = email;
+        this.CFDI = CFDI;
     }
 
-    public void setCFDI(String CFDI) {
-        this.CFDI = CFDI;
+    public String getCFDI() {
+        return CFDI;
     }
 
     public int getId_usuario() {
         return id_usuario;
     }
 
-    public void setId_usuario(int id_usuario) {
-        this.id_usuario = id_usuario;
-    }
-
     public String getNombre() {
         return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
     }
 
     public String getApellido_paterno() {
         return apellido_paterno;
     }
 
-    public void setApellido_paterno(String apellido_paterno) {
-        this.apellido_paterno = apellido_paterno;
-    }
-
     public String getApellido_materno() {
         return apellido_materno;
-    }
-
-    public void setApellido_materno(String apellido_materno) {
-        this.apellido_materno = apellido_materno;
     }
 
     public String getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
-    }
-
     public String getPass() {
         return pass;
-    }
-
-    public void setPass(String pass) {
-        this.pass = pass;
     }
 
     public String getNombre_razonsocial() {
         return nombre_razonsocial;
     }
 
-    public void setNombre_razonsocial(String nombre_razonsocial) {
-        this.nombre_razonsocial = nombre_razonsocial;
-    }
-
     public String getRfc() {
         return rfc;
     }
 
-    public void setRfc(String rfc) {
-        this.rfc = rfc;
-    }
-
     public String getEmail() {
         return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 }

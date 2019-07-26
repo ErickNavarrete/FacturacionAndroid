@@ -24,7 +24,8 @@ public class MyApiAdapter {
         httpClient.addInterceptor(logging);
 
         //String baseUrl = "http://contago.dynns.com/api/";
-        String baseUrl = "http://192.168.15.12/api/";
+        //String baseUrl = "http://192.168.15.12/api/";
+        String baseUrl = "http://192.168.1.68/api/";
 
         if (API_SERVICE == null) {
             Retrofit retrofit = new Retrofit.Builder()

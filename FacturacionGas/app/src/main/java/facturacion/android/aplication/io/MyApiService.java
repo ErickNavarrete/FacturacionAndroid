@@ -12,6 +12,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Query;
 
 public interface MyApiService {
@@ -49,4 +50,14 @@ public interface MyApiService {
 
     @GET("Empresa")
     Call<EmpresaResponse> getEmpresa();
+
+    @GET("Cliente/Usuarios")
+    Call<ClienteResponse> getClienteUsuario(
+            @Query("RFC") String RFC
+    );
+
+    @PUT("Cliente")
+    Call<ClienteResponse> updateCliente(
+            @Body ClienteResponse clienteResponse
+    );
 }

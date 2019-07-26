@@ -3,5 +3,6 @@
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">contago.dynns.com</domain>
         <domain includeSubdomains="true">192.168.15.12</domain>
+        <domain includeSubdomains="true">192.168.1.68</domain>
     </domain-config>
 </network-security-config>
