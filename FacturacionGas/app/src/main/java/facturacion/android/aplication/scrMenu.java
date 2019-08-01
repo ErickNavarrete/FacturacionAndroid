@@ -141,6 +141,8 @@ public class scrMenu extends AppCompatActivity {
                     startActivity(intent);
                     break;
                 case R.id.btnFacturas:
+                    Intent intent2 = new Intent(scrMenu.this,scrMisFacturas.class);
+                    startActivity(intent2);
                     break;
                 case R.id.btnSesion:
                     closeSesion();

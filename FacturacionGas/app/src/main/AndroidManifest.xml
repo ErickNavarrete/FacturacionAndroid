@@ -14,7 +14,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp">
-        <activity android:name=".scrLogin"
+        <activity android:name=".scrMisFacturas"></activity>
+        <activity
+            android:name=".scrLogin"
             android:label="Facturación">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,17 +24,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".scrMenu"
+        <activity
+            android:name=".scrMenu"
             android:label="Búsqueda Ticket" />
-        <activity android:name=".Registro"
+        <activity
+            android:name=".Registro"
             android:label="Nuevo Usuario" />
-        <activity android:name=".scrFactura"
+        <activity
+            android:name=".scrFactura"
             android:label="Datos Ticket" />
-        <activity android:name=".scrDatosCliente"
-            android:label="Mis Datos"></activity>
-        <activity android:name=".scrDatosFactura"
-            android:label="Datos Factura"></activity>
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".scrDatosCliente"
+            android:label="Mis Datos" />
+        <activity
+            android:name=".scrDatosFactura"
+            android:label="Datos Factura" />
+        <activity
+            android:name=".MainActivity"
             android:label="Búsqueda Ticket" />
     </application>
 
