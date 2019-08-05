@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp">
-        <activity android:name=".scrMisFacturas"></activity>
+        <activity android:name=".scrDatosFactura2"></activity>
+        <activity android:name=".scrMisFacturas" />
         <activity
             android:name=".scrLogin"
             android:label="Facturación">

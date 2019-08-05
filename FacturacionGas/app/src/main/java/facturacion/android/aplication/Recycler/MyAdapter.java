@@ -11,15 +11,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import facturacion.android.aplication.R;
+import facturacion.android.aplication.io.response.FacturaResponse;
+import facturacion.android.aplication.io.response.FacturasResponse;
 
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
-    private List<String> UUIDS;
+    private List<FacturasResponse> facturas;
     private int layout;
     private OnItemClickListener listener;
 
-    public MyAdapter(List<String> UUIDS, int layout, OnItemClickListener listener){
-        this.UUIDS = UUIDS;
+    public MyAdapter(List<FacturasResponse> facturas, int layout, OnItemClickListener listener){
+        this.facturas = facturas;
         this.layout = layout;
         this.listener = listener;
     }
@@ -34,27 +36,27 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MyAdapter.ViewHolder holder, int position) {
-        holder.bind(UUIDS.get(position), listener);
+        holder.bind(facturas.get(position), listener);
     }
 
     @Override
     public int getItemCount() {
-        return UUIDS.size();
+        return facturas.size();
     }
     public static class  ViewHolder extends RecyclerView.ViewHolder{
-        public TextView uuid;
+        public TextView datos;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.uuid = itemView.findViewById(R.id.tbTextViewName);
+            datos = itemView.findViewById(R.id.tbDatos);
         }
 
-        public void bind(final String uuid, final OnItemClickListener listener){
-            this.uuid.setText(uuid);
-            itemView.setOnClickListener(view -> listener.onItemClick(uuid, getAdapterPosition()));
+        public void bind(final FacturasResponse factura, final OnItemClickListener listener){
+            datos.setText(factura.getDatos());
+            itemView.setOnClickListener(view -> listener.onItemClick(factura, getAdapterPosition()));
         }
     }
     public interface OnItemClickListener{
-        void onItemClick(String name, int position);
+        void onItemClick(FacturasResponse factura, int position);
     }
 }
