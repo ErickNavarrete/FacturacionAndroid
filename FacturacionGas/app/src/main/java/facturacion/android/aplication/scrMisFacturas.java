@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,6 +31,7 @@ public class scrMisFacturas extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private SharedPreferences preferences;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,12 +39,18 @@ public class scrMisFacturas extends AppCompatActivity {
         setContentView(R.layout.activity_scr_mis_facturas);
         setToolbar();
         preferences = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+        progressDialog = new ProgressDialog(scrMisFacturas.this);
+        progressDialog.setMessage("Cargando...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
 
         Call<List<FacturasResponse>> call = MyApiAdapter.getApiService().getFacturasRFC(getRFC());
         call.enqueue(new Callback<List<FacturasResponse>>() {
             @Override
             public void onResponse(Call<List<FacturasResponse>> call, Response<List<FacturasResponse>> response) {
                 if(response.isSuccessful()){
+                    progressDialog.cancel();
                     facturas = response.body();
                     mRecyclerView = findViewById(R.id.recyclerView);
                     mLayoutManager = new LinearLayoutManager(scrMisFacturas.this);
@@ -60,7 +68,9 @@ public class scrMisFacturas extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<FacturasResponse>> call, Throwable t) {
-
+                progressDialog.cancel();
+                Toast toast = Toast.makeText(getApplicationContext(),t.getMessage(),Toast.LENGTH_LONG);
+                toast.show();
             }
         });
     }

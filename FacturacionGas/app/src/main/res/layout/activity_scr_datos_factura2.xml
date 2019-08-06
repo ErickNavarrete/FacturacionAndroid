@@ -192,6 +192,46 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+
+            app:boxBackgroundColor="#eeeeee"
+            android:hint="Producto">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tbProducto"
+                android:background="@null"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minLines="1"
+                android:maxLines="1"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+
+            app:boxBackgroundColor="#eeeeee"
+            android:hint="Volumen">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tbVolumen"
+                android:background="@null"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minLines="1"
+                android:maxLines="1"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
 
     </LinearLayout>
 

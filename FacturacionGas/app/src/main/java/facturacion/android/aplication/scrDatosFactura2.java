@@ -4,10 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -25,6 +27,7 @@ public class scrDatosFactura2 extends AppCompatActivity {
     private TextInputEditText tbTotal;
     private TextInputEditText tbFecha;
     private FacturaResponse facturaResponse;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,24 +52,34 @@ public class scrDatosFactura2 extends AppCompatActivity {
         Intent intent = getIntent();
         int id_factura = intent.getIntExtra("intVariableName", 0);
 
+        progressDialog = new ProgressDialog(scrDatosFactura2.this);
+        progressDialog.setMessage("Cargando...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
         Call<FacturaResponse> call = MyApiAdapter.getApiService().getFacturasID(id_factura);
         call.enqueue(new Callback<FacturaResponse>() {
             @Override
             public void onResponse(Call<FacturaResponse> call, Response<FacturaResponse> response) {
                 if(response.isSuccessful()){
+                    progressDialog.cancel();
+
                     facturaResponse = response.body();
                     tbSerie.setText(facturaResponse.getSerie_t());
                     tbFolio.setText(facturaResponse.getFolio_t());
                     tbUUID.setText(facturaResponse.getUuid());
                     tbSubT.setText(String.valueOf(facturaResponse.getSub_t()));
                     tbTotal.setText(String.valueOf(facturaResponse.getTotal_t()));
-                    tbFecha.setText(facturaResponse.getFecha_t());
+                    String[] date = facturaResponse.getFecha_t().split("T");
+                    tbFecha.setText(date[0]);
                 }
             }
 
             @Override
             public void onFailure(Call<FacturaResponse> call, Throwable t) {
-
+                progressDialog.cancel();
+                Toast toast = Toast.makeText(getApplicationContext(),t.getMessage(),Toast.LENGTH_LONG);
+                toast.show();
             }
         });
     }
