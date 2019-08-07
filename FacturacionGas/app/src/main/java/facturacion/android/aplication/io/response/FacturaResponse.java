@@ -9,6 +9,7 @@ public class FacturaResponse implements Serializable {
     private float sub_t;
     private float total_t;
     private String fecha_t;
+    private String id_venta_gas;
 
     public String getSerie_t() {
         return serie_t;
@@ -34,4 +35,7 @@ public class FacturaResponse implements Serializable {
         return uuid;
     }
 
+    public String getId_venta_gas() {
+        return id_venta_gas;
+    }
 }

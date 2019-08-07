@@ -25,6 +25,16 @@ public interface MyApiService {
             @Query("monto")double monto
     );
 
+    @GET("Facturacion/Facturas_Det")
+    Call<TicketResponse> getTicketFactura(
+            @Query("id_factura") int id_factura
+    );
+
+    @GET("Facturacion/Print")
+    Call<Void> getFacturaPrint(
+            @Query("id_factura") int id_factura
+    );
+
     @GET("Articulos")
     Call<ArticuloClass> getArticulos(
             @Query("Clave") String clave
